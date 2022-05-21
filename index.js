@@ -15,9 +15,16 @@ client.on("ready", () => {
 })
 
 client.on("message", message => {
-    switch (message.content.toLowerCase()) {
+    const args = message.content.split(' ');
+    const cmd = args.shift().toLocaleLowerCase();
+    switch (cmd) {
         case 'ping':
-            message.channel.send(`Ping: ${client.ws.ping} ms`)
+            message.channel.send(`Ping: ${client.ws.ping} ms`);
+            break;
+        case 'say': 
+            if(message.deletable) message.delete()
+            message.channel.send(args.join(' '))
+            break;
     }
 })
 
