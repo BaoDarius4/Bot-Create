@@ -1,5 +1,9 @@
 {
   "dependencies": {
-    "discord.js": "^12.5.3"
+    "ascii-table": "^0.0.9",
+    "axios": "^0.27.2",
+    "common-tags": "^1.8.2",
+    "discord.js": "^12.5.3",
+    "twemoji-parser": "^13.1.0"
   }
 }
