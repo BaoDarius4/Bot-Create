@@ -1,4 +1,4 @@
-const { Client, MessageEmbed, Util } = require('discord.js');
+const { Client, MessageEmbed, Util, Collection} = require('discord.js');
 const client = new Client
 const { token } = require('./config.json');
 const { parse } = require('twemoji-parser');
@@ -15,24 +15,25 @@ client.on("ready", () => {
     })
 })
 
-client.commands = new collection();
-client.aliases = new collection();
+client.commands = new Collection();
+client.aliases = new Collection();
 
-["commands"].forEach(Headers => {
-    return(`\handlers\${handlers}`)(client)
-})
-client.on("message", message => {
-    if (!message.author.bot) return
+["command"].forEach(handler => {
+    require(`./handlers/${handler}`)(client)
+});
+
+client.on("message", async message => {
+    if (message.author.bot) return
     if (!message.guild) return
-    const perfix = '!'
+    const prefix = 't!'
     if (!message.content.startsWith(prefix)) return
-    const args = message.content.slice(prefix.length).trim().split(/ +/g);
-    const cmd = args.shift().toLocaleLowerCase();
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const cmd = args.shift().toLowerCase();
     if (cmd.length === 0) return
-    let command = client.commands.get(cmd)
+    let command = client.commands.set(cmd)
     if (!command) command = client.commands.get(client.aliases.get(cmd))
     if (command) command.run(client, message, args)
-    
+    /*
     switch (cmd) {
         case 'ping':
             message.channel.send(`Ping: ${client.ws.ping} ms`);
@@ -76,6 +77,7 @@ client.on("message", message => {
 
         
     }
+    */
 })
 
 client.login(token)
